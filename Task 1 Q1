@@ -1,0 +1,11 @@
+import java.lang.Integer
+
+def firstNum = getCustomFieldValue("Num1") as Integer
+def secondNum = getCustomFieldValue("Num2") as Integer
+
+if (firstNum || secondNum){
+    return firstNum + secondNum
+}
+else{
+    return 0
+}
