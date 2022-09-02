@@ -1,0 +1,6 @@
+import com.atlassian.jira.component.ComponentAccessor
+
+def subTaskManager = ComponentAccessor.getSubTaskManager()
+def totalSubTasks = subTaskManager.getSubTaskObjects(issue).size()
+
+return totalSubTasks ? totalSubTasks as Double : null
