@@ -1,0 +1,29 @@
+import com.atlassian.jira.component.ComponentAccessor
+
+def currentEventIssue = event.issue
+
+// Get last comment
+def comments = ComponentAccessor.commentManager.getLastComment(currentEventIssue)
+
+def lastComment = ""
+
+if (comments) {
+    lastComment = comments.body
+}
+
+// Define login user
+def loggedInUser = ComponentAccessor.jiraAuthenticationContext.loggedInUser
+def issueService = ComponentAccessor.issueService
+
+// Define the new params (a new description)
+def issueInputParameters = issueService.newIssueInputParameters()
+issueInputParameters.setDescription(lastComment)
+
+// Update the issue
+def issueId = currentEventIssue.id
+def updateValidationResult = issueService.validateUpdate(loggedInUser, issueId, issueInputParameters)
+assert updateValidationResult.valid : updateValidationResult.errorCollection
+
+// Validate the update
+def issueResult = issueService.update(loggedInUser, updateValidationResult)
+assert issueResult.valid : issueResult.errorCollection
